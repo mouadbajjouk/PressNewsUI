@@ -104,7 +104,7 @@ const App = () => {
   return (
     <div className='container-fluid'>
       <div className='row'>
-        <div className='col-12'>
+        <div className='col-6'>
           <form method='post' className='form-group'>
             <label>Username</label>
             <input type='text' placeholder='' className='form-control' /> <br />
@@ -140,12 +140,12 @@ const App = () => {
                 <td>{s.ImagePath ? s.ImagePath : '----'}</td>
                 <td>
                   <button
-                    className='btn btn-primary'
+                    className='btn btn-primary mr-3'
                     onClick={() => getInfo(s)}>
                     Edit
                   </button>
                   <button
-                    className='btn btn-primary'
+                    className='btn btn-danger'
                     onClick={() => setDelete(!_delete)}>
                     Delete
                   </button>
@@ -153,6 +153,8 @@ const App = () => {
               </tr>
             ))}
           </table>
+        </div>
+        <div className='col-md-6'>
           <label>Name</label>
           <input type='text' id='name' className='form-control' /> <br />
           <label>Image</label>
@@ -161,7 +163,7 @@ const App = () => {
             type='submit'
             value='Add'
             onClick={() => setInsert(!insert)}
-            className='btn btn-primary'
+            className='btn btn-success mr-3'
           />
           <input
             type='submit'
