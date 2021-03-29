@@ -3,17 +3,21 @@ import axios from 'axios';
 import './index.css';
 
 const App = () => {
+  const [loggedIn, setloggedIn] = useState(false);
   const [state, setState] = useState([]);
   const [insert, setInsert] = useState(false);
   const [put, setPut] = useState(false);
   const [_delete, setDelete] = useState(false);
   const [Id, setId] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     const myHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Content-type': 'Application/json',
-      Authorization: 'Basic YWRtaW46YWRtaW4=',
+      Authorization: 'Basic ' + btoa(username + ':' + password),
+      /* YWRtaW46YWRtaW4= */
     };
 
     const fetchData = async () => {
@@ -101,23 +105,18 @@ const App = () => {
     document.querySelector('#image').value = info.ImagePath;
   };
 
+  const login = () => {
+    setUsername(document.querySelector('#username').value);
+    setPassword(document.querySelector('#password').value);
+    setloggedIn(true);
+  };
+
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-6'>
-          <form method='post' className='form-group'>
-            <label>Username</label>
-            <input type='text' placeholder='' className='form-control' /> <br />
-            <label>Password</label>
-            <input
-              type='password'
-              placeholder=''
-              className='form-control'
-            />{' '}
-            <br />
-            <input type='submit' value='Login' className='btn btn-primary' />
-          </form>
-          Records: {state.length}
+      {loggedIn ? (
+        <div className='row'>
+          <div className='col-6'>
+            {/* Records: {state.length}
           <button onClick={() => setInsert(!insert)}>
             UPDATE - {insert ? 'true' : 'false'}
           </button>
@@ -126,53 +125,79 @@ const App = () => {
           </button>
           <button onClick={() => setDelete(!_delete)}>
             DELETE - {_delete ? 'true' : 'false'}
-          </button>
-          <table border='1' id='customers'>
-            <tr>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Delete</th>
-            </tr>
-
-            {state.map((s, index) => (
-              <tr key={s.Id} onMouseOver={() => mapId(s)}>
-                <td>{s.Name ? s.Name : '----'}</td>
-                <td>{s.ImagePath ? s.ImagePath : '----'}</td>
-                <td>
-                  <button
-                    className='btn btn-primary mr-3'
-                    onClick={() => getInfo(s)}>
-                    Edit
-                  </button>
-                  <button
-                    className='btn btn-danger'
-                    onClick={() => setDelete(!_delete)}>
-                    Delete
-                  </button>
-                </td>
+          </button> */}
+            <table border='1' id='customers'>
+              <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Delete</th>
               </tr>
-            ))}
-          </table>
+
+              {state.map((s, index) => (
+                <tr key={s.Id} onMouseOver={() => mapId(s)}>
+                  <td>{s.Name ? s.Name : '----'}</td>
+                  <td>{s.ImagePath ? s.ImagePath : '----'}</td>
+                  <td>
+                    <button
+                      className='btn btn-primary mr-3'
+                      onClick={() => getInfo(s)}>
+                      Edit
+                    </button>
+                    <button
+                      className='btn btn-danger'
+                      onClick={() => setDelete(!_delete)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </table>
+          </div>
+          <div className='col-md-6'>
+            <label>Name</label>
+            <input type='text' id='name' className='form-control' /> <br />
+            <label>Image</label>
+            <input type='text' id='image' className='form-control' /> <br />
+            <input
+              type='submit'
+              value='Add'
+              onClick={() => setInsert(!insert)}
+              className='btn btn-success mr-3'
+            />
+            <input
+              type='submit'
+              value='Update'
+              onClick={() => setPut(!put)}
+              className='btn btn-primary'
+            />
+          </div>
         </div>
-        <div className='col-md-6'>
-          <label>Name</label>
-          <input type='text' id='name' className='form-control' /> <br />
-          <label>Image</label>
-          <input type='text' id='image' className='form-control' /> <br />
+      ) : (
+        <form method='post' className='form-group'>
+          <label>Username</label>
+          <input
+            type='text'
+            id='username'
+            placeholder=''
+            className='form-control'
+          />{' '}
+          <br />
+          <label>Password</label>
+          <input
+            type='password'
+            id='password'
+            placeholder=''
+            className='form-control'
+          />{' '}
+          <br />
           <input
             type='submit'
-            value='Add'
-            onClick={() => setInsert(!insert)}
-            className='btn btn-success mr-3'
-          />
-          <input
-            type='submit'
-            value='Update'
-            onClick={() => setPut(!put)}
+            value='Login'
             className='btn btn-primary'
+            onClick={() => login()}
           />
-        </div>
-      </div>
+        </form>
+      )}
     </div>
   );
 };
